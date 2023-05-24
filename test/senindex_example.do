@@ -8,6 +8,9 @@ global src  = "${path}/src"
 * run ado file
 run "${sendindex}/senindex.ado"
 
+* From github using net install as well
+net install senindex, from("https://raw.githubusercontent.com/rrmaximiliano/senindex/main") replace
+
 * ------------------------------------------------------------------------------
 * Test example
 * ------------------------------------------------------------------------------
