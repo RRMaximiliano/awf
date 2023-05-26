@@ -1,12 +1,12 @@
 * ------------------------------------------------------------------------------
 * paths and load adofile if not installed from ssc 
 * ------------------------------------------------------------------------------
-global path = "C:/Users/ifyou/Documents/GitHub/packages-stata/senindex/test"
+global path = "C:/Users/ifyou/Documents/GitHub/packages-stata/senindex"
 global data = "${path}/data"
 global src  = "${path}/src"
 
 * run ado file
-run "${sendindex}/senindex.ado"
+// run "${sendindex}/senindex.ado"
 
 * From github using net install as well
 net install senindex, from("https://raw.githubusercontent.com/rrmaximiliano/senindex/main") replace
