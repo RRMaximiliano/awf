@@ -16,18 +16,32 @@ net install senindex, from("https://raw.githubusercontent.com/rrmaximiliano/seni
 * ------------------------------------------------------------------------------
 
 * Using Sepov data
+* Does we want to allow a variable for the povery line? Or a fixed poverty line.
 * ------------------------------------------------------------------------------
 
+* Example 1
+* ------------------------------------------------------------------------------
 * load data
-use "${data}/SEPOV.dta", clear 
+use "${data}/NLSS2011_cons.dta", clear 
+
+* svyset
+svyset xhpsu [pweight=wt_ind], strata(xstra)
+
+* index
+senindex totcons_pc_7, z(45000)         // Total HH consumption
+senindex food_pc_7,    z(20000)         // Food consumption which contains two obs with 0s.
+senindex food_pc_7,    z(20000) bottom  // Bottom coded those two obs.
+ 
+* Example 2
+* ------------------------------------------------------------------------------
+* load data
+use "${data}/SEPOV.dta", clear
 
 * index
 senindex pcexp_r, z(129.19)
-senindex pcexp_r, z(129.19) keep nonotes
-senindex pcexp_r, z(129.19) keep nonotes dot
+senindex pcexp_r, z(129.19) keep notes
 
-
-* Using dataset to generate diff SEs example (with jacknife)
+* Using an example dataset to generate diff SEs example (with jacknife)
 * ------------------------------------------------------------------------------
 
 * load data
@@ -38,4 +52,9 @@ svyset [pweight=pw], jkrweight(jkw_*) vce(jackknife)
 gen income = runiformint(1,10000)
 
 * index
-senindex income, z(2000) keep nonotes
+senindex income, z(2000) keep notes
+
+* replace obs to 0
+replace income = 0 in 1/20
+senindex income, z(2000) keep 
+senindex income, z(2000) keep bottom 

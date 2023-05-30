@@ -1,46 +1,52 @@
-*! version 0.0.1 20MAY2023
+*! version 0.0.2 29MAY2023
 capture program drop senindex
 program define senindex, rclass
   version 12
-  syntax varlist(min=1 max=1) [aw iw] [if] [in], z(real) ///
-    [DOTplot KEEPvars NONOTES]
-  
-  * Setup vce 
-  * Prompt the user to use svyset: Parameters to set
-
-  * Check if income is 0 or negative
-  // Anything that is zero or negative, set to the smallest positive value
-  // Option 1: Warning: x many observations out of _N were set to ... because ...
-  // Option 2: Value of 0 have been dropped from the calculations
-  // Option 3: Winsorized option
-  
+  syntax varlist(min=1 max=1) [aw iw pw] [if] [in], z(real) ///
+    [NOTES KEEPvars BOTTOMcoded DOTplot]
+   
   * Remove observations excluded by if and in
-  marksample touse,  novarlist
-  keep if `touse'
+  marksample touse, novarlist
+  quietly keep if `touse'
     
   * Tempvars
   tempvar mean_income
+  tempvar var
   
+  * Gen income (or var) only for those that are greater than zero
   quietly {
+    gen `var' = `varlist' if `varlist' > 0 & !missing(`varlist')
+    
+    if !missing("`bottomcoded'") {
+      tempvar p1
+      
+      quietly sum `varlist', detail
+      local bc = `r(p1)'
+      gen `p1' = `r(p1)'
+      replace `var' = `r(p1)' if missing(`var')
+    } 
+    
     count if `varlist' <= 0
     local NN = r(N)
   }
   
   capture drop Z W censored C P I
-  * Generate the variables
-  // W Index
-  gen Z = `z'    
-  gen W  = Z / `varlist'    if !missing(`varlist')
-  // C Index
-  gen censored = `varlist'  if `varlist' <  Z
-  replace censored = Z      if `varlist' >= Z
-  gen C = (Z / censored)
-  // P Index
-  gen P = (Z / censored) - 1
-  // I Index
-  quietly egen `mean_income' = mean(`varlist') 
-  gen I = `mean_income' / `varlist'
- 
+  quietly {
+    * Generate the variables
+    // W Index
+    gen Z = `z'    
+    gen W  = Z / `var'    if `var' > 0 & !missing(`var')
+    // C Index
+    gen censored     = `var'  if `var' <  Z
+    replace censored = Z      if `var' >= Z
+    gen C = (Z / censored)
+    // P Index
+    gen P = (Z / censored) - 1
+    // I Index
+    quietly egen `mean_income' = mean(`var') 
+    gen I = `mean_income' / `var'
+  }
+  
   * Label vars
   label var Z         "Reference Income"
   label var W         "W Index"  
@@ -55,21 +61,30 @@ program define senindex, rclass
   * Check if z is positive
   if `z' > 0 {
     * Mean estimates
-    if (`NN' != 0) {
-      display as result "There were a total of `NN' observations with income 0 in your data."
-      display as result "Please check your `varlist' variable."
-    }
-    display as text _n(2) "Distribution-Sensitive Index for var: `varlist'"
+    display as text "Distribution-Sensitive Index for var: `varlist'"
     
-    svy: mean W C P I [`weight' `exp'] `if'
+    svy: mean W C P I [`weight' `exp'] `if' `in'
     
-    if "`nonotes'" == "" {
+    * Message: general note for each index
+    if !missing("`notes'") {
       display as result "W Index is defined as: the factor by which `varlist' should be multiplied to reach z."   
       display as result "C Index is defined as: the average factor by which `varlist' needs to be multiplied to attain the standard of living defined by the threshold, with no increase for people above the threshold z."  
       display as result "P Index is defined as: C - 1 which is the average growth rate needed to attain the standard of livign defined by the threshold z."     
-      display as result "I Index is defined as: the inequality index which is the average factor by which `varlist' must be multiplied to get to the mean `varlist'."   
-      display as result "Please refer to Kraay et al. (2023) for a detailed discussion on the estimation of each index."        
+      display as result "I Index is defined as: the inequality index which is the average factor by which `varlist' must be multiplied to get to the mean `varlist'."         
     }     
+    
+    * Message: Count 0 and not bottomcoded
+    if (`NN' != 0 & missing("`bottomcoded'")) {
+      display as error "Warning: There are a total of `NN' observations with 0s or negatives in your data and they have been removed from the estimations. Please check the distribution of `varlist'."
+    }
+    
+    * Message: Count 0 and bottom coded
+    else if (`NN' != 0 & !missing("`bottomcoded'")) {
+      display as error "Warning: There are a total of `NN' observations with 0s or negatives in your data and they have been set to `bc' (1st percentile). Please check the distribution of `varlist'."
+    }
+    
+    * Message: Paper notes
+    display as result "Note: These indices correspond to the four welfare, poverty, and inequality indices discussed in Section 2 of Kraay (r) al. (2023)." 
   } 
   
   else if `z' <= 0 {
