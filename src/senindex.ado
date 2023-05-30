@@ -63,7 +63,7 @@ program define senindex, rclass
     * Mean estimates
     display as text "Distribution-Sensitive Index for var: `varlist'"
     
-    svy: mean W C P I [`weight' `exp'] `if' `in'
+    svy: mean W C P I `if' `in'
     
     * Message: general note for each index
     if !missing("`notes'") {
