@@ -1,21 +1,22 @@
 {smcl}
-{* 20 May 2023}{...}
+{* 29 May 2023}{...}
 {hline}
 help for {hi:senindex}
 {hline}
 
 {title:Title}
 
-{phang2}{cmdab:senindex} {hline 2} Calculate distribution-sensitive indices
+{phang}{cmdab:senindex} {hline 2} Calculate distribution-sensitive indices
 
 {title:Syntax}
 
-{phang2}
-{cmdab:senindex} {it:varlist(min=1 max=1)} [{help if:if}] [{help in:in}] [{help weight}], {cmdab:z()}{it:real}{cmd:)} 
+{phang}
+{cmdab:senindex} {it:varlist(min=1 max=1)} [{help if:if}] [{help in:in}] [{help weight}], {cmdab:z(}{it:real}{cmd:)} 
 [
+{cmdab:keep:vars}  
 {cmdab:dot:plot}
-{cmdab:keep:vars}
-{cmdab:nonotes}
+{cmdab:notes}
+{cmdab:bottomcoded}
 ]
 
 {marker opts}{...}
@@ -28,9 +29,10 @@ help for {hi:senindex}
 
 {pstd}{it:    {ul:{hi:Optional options}}}{p_end}
 
-{synopt :{cmdab:dot:plot}}Displays a dot plot of the individual contribution as a ratio of the specified variable.{p_end}
 {synopt :{cmdab:keep:vars}}Keeps the generated variables after executing the command.{p_end}
-{synopt :{cmdab:nonotes}}Suppresses the display of additional notes about the indices.{p_end}
+{synopt :{cmdab:notes}}Displays additional notes about the indices.{p_end}
+{synopt :{cmdab:bottom:coded}}For those observations with values equal to zero or negative, the command replaces their value for the first percentile.{p_end}
+{synopt :{cmdab:dot:plot}}Displays a dot plot of the individual contribution as a ratio of the specified variable.{p_end}
 
 {synoptline}
 
@@ -64,6 +66,5 @@ help for {hi:senindex}
     . senindex income, z(2000) keep nonotes
 
 {title:Author}
-
-{phang}Author: The World Bank Group
+{phang}The World Bank Group
 
