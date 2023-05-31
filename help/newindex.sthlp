@@ -1,5 +1,5 @@
 {smcl}
-{* 29 May 2023}{...}
+{* 31 May 2023}{...}
 {hline}
 help for {hi:newindex}
 {hline}
@@ -16,7 +16,7 @@ help for {hi:newindex}
 {cmdab:keep:vars}  
 {cmdab:dot:plot}
 {cmdab:notes}
-{cmdab:bottomcoded}
+{cmdab:bc({it:real})}
 ]
 
 {marker opts}{...}
@@ -31,7 +31,7 @@ help for {hi:newindex}
 
 {synopt :{cmdab:keep:vars}}Keeps the generated variables after executing the command.{p_end}
 {synopt :{cmdab:notes}}Displays additional notes about the indices.{p_end}
-{synopt :{cmdab:bottom:coded}}For those observations with values equal to zero or negative, the command replaces their value for the first percentile.{p_end}
+{synopt :{cmdab:bc(}{it:real}{cmd:)}}Specifies the value in which observations are going to be bottom-coded. All observations with values lower than bc and/or negatives are bottom-coded.{p_end}
 {synopt :{cmdab:dot:plot}}Displays a dot plot of the individual contribution as a ratio of the specified variable.{p_end}
 
 {synoptline}
@@ -66,5 +66,8 @@ help for {hi:newindex}
     . newindex income, z(2000) keep nonotes
 
 {title:Author}
-{phang}The World Bank Group
+{phang} Berk Ozler, Development Research Group, The World Bank
+{phang} Dean Mitchell Jolliffe, Development Data Group, The World Bank
+{phang} Rony Rodriguez Ramirez, Development Research Group, The World Bank
+
 
