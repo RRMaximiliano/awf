@@ -90,7 +90,7 @@
       }     
       
       * Message: Count 0 and not bottomcoded
-      if (`NN' != 0) & missing(`bc') {
+      if (`NN' != 0) & (`bc' == 0.000001) {
         display as error "Warning: There are a total of `NN' observations with 0s or negatives in your data and they have been removed from the estimations. Please check the distribution of `varlist'."
       }
       

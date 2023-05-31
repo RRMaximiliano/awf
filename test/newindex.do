@@ -6,10 +6,10 @@ global data = "${path}/data"
 global src  = "${path}/src"
 
 * run ado file
-run "${src}/newindex.ado"
+// run "${src}/newindex.ado"
 
 * From github using net install as well
-// net install newindex, from("https://raw.githubusercontent.com/rrmaximiliano/newindex/main") replace force 
+net install newindex, from("https://raw.githubusercontent.com/rrmaximiliano/newindex/main") replace force 
 
 * ------------------------------------------------------------------------------
 * Test example
@@ -40,7 +40,7 @@ newindex pcexp_r, z(129.19) keep notes
 
 * replace obs to 0
 replace pcexp_r = 0 in 1/20
-newindex pcexp_r, z(129.19) keep 
+newindex pcexp_r, z(129.19) keep
 newindex pcexp_r, z(129.19) bc(100) keep 
 
 * Using an example dataset to generate diff SEs example (with jacknife)
