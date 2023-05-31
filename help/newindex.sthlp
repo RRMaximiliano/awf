@@ -1,17 +1,17 @@
 {smcl}
 {* 29 May 2023}{...}
 {hline}
-help for {hi:senindex}
+help for {hi:newindex}
 {hline}
 
 {title:Title}
 
-{phang}{cmdab:senindex} {hline 2} Calculate distribution-sensitive indices
+{phang}{cmdab:newindex} {hline 2} Calculate distribution-sensitive indices
 
 {title:Syntax}
 
 {phang}
-{cmdab:senindex} {it:varlist(min=1 max=1)} [{help if:if}] [{help in:in}] [{help weight}], {cmdab:z(}{it:real}{cmd:)} 
+{cmdab:newindex} {it:varlist(min=1 max=1)} [{help if:if}] [{help in:in}] [{help weight}], {cmdab:z(}{it:real}{cmd:)} 
 [
 {cmdab:keep:vars}  
 {cmdab:dot:plot}
@@ -38,10 +38,10 @@ help for {hi:senindex}
 
 {title:Description}
 
-{pstd}{cmdab:sendindex}: The senindex command calculates distribution-sensitive indices based on a specified variable. It provides four indices: W Index, C Index, P Index, and I Index. The indices are calculated using the reference income specified by the 'z' option.
+{pstd}{cmdab:newindex}: The newindex command calculates distribution-sensitive indices based on a specified variable. It provides four indices: W Index, C Index, P Index, and I Index. The indices are calculated using the reference income specified by the 'z' option.
 
 {title:Remarks}
-- The senindex command calculates four distribution-sensitive indices:
+- The newindex command calculates four distribution-sensitive indices:
     1. W Index: Represents the factor by which the specified variable should be multiplied to reach the reference income (z).
     2. C Index: Represents the average factor by which the specified variable needs to be multiplied to attain the standard of living defined by the threshold (z), with no increase for people above the threshold.
     3. P Index: Represents the average growth rate needed to attain the standard of living defined by the threshold (z), calculated as C - 1.
@@ -49,11 +49,11 @@ help for {hi:senindex}
 
 - If the specified variable contains zero or negative values, they are set to the smallest positive value by default.
 
-- The senindex command supports the use of survey data with the svy prefix. Make sure to set the appropriate survey design using svyset before running the command.
+- The newindex command supports the use of survey data with the svy prefix. Make sure to set the appropriate survey design using svyset before running the command.
 
 {title:Examples}
 1. Calculate the distribution-sensitive indices using the variable "income" with a reference income of 1000:
-    . senindex income, z(1000)
+    . newindex income, z(1000)
 
 2. Calculate the indices using survey data and weights:
     . webuse stage5a_jkw, clear
@@ -63,7 +63,7 @@ help for {hi:senindex}
     . gen income = runiformint(1,10000)
     .
     . * index
-    . senindex income, z(2000) keep nonotes
+    . newindex income, z(2000) keep nonotes
 
 {title:Author}
 {phang}The World Bank Group

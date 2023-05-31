@@ -1,8 +1,8 @@
 *! version 0.0.2 29MAY2023
-capture program drop senindex
-program define senindex, rclass
+capture program drop newindex
+program define newindex, rclass
   version 12
-  syntax varlist(min=1 max=1) [aw iw pw] [if] [in], z(real) ///
+  syntax varlist(min=1 max=1) [if] [in], z(real) ///
     [NOTES KEEPvars BOTTOMcoded DOTplot]
    
   * Remove observations excluded by if and in
@@ -35,7 +35,7 @@ program define senindex, rclass
     * Generate the variables
     // W Index
     gen Z = `z'    
-    gen W  = Z / `var'    if `var' > 0 & !missing(`var')
+    gen W  = Z / `var'        if `var' > 0 & !missing(`var')
     // C Index
     gen censored     = `var'  if `var' <  Z
     replace censored = Z      if `var' >= Z
@@ -43,8 +43,10 @@ program define senindex, rclass
     // P Index
     gen P = (Z / censored) - 1
     // I Index
-    quietly egen `mean_income' = mean(`var') 
-    gen I = `mean_income' / `var'
+    quietly svy: mean `var'
+    matrix define mat_mean = r(table)
+    local mat_mean = r(table)[1,1]
+    gen I = `mat_mean' / `var'
   }
   
   * Label vars
@@ -63,7 +65,7 @@ program define senindex, rclass
     * Mean estimates
     display as text "Distribution-Sensitive Index for var: `varlist'"
     
-    svy: mean W C P I [`weight' `exp'] `if' `in'
+    svy: mean W C P I `if' `in'
     
     * Message: general note for each index
     if !missing("`notes'") {
