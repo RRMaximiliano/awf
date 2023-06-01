@@ -16,7 +16,7 @@ help for {hi:welfarefactor}
 {cmdab:keep:vars}  
 {cmdab:dot:plot}
 {cmdab:notes}
-{cmdab:bc({it:real})}
+{cmdab:bc(}{it:real}{cmd:)} 
 ]
 
 {marker opts}{...}
