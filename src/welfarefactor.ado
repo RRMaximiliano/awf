@@ -1,6 +1,6 @@
   *! version 0.0.4 31MAY2023
-  capture program drop newindex
-  program define newindex, rclass
+  capture program drop welfarefactor
+  program define welfarefactor, rclass
     version 12
     syntax varlist(min=1 max=1) [if] [in], ///
       z(real)             ///
