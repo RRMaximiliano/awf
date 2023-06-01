@@ -1,3 +1,3 @@
 v 0.0.5
 d The World Bank
-p welfarefactor - Stata program to estimate distribution-sensitive indices as per Kraay et al. (2023).
+p welfarefactor - Stata program to estimate distribution-sensitive indices in Kraay et al. (2023).

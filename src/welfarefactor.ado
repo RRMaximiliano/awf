@@ -1,4 +1,4 @@
-  *! version 0.0.4 31MAY2023
+  *! version 0.0.5 31MAY2023
   capture program drop welfarefactor
   program define welfarefactor, rclass
     version 12
