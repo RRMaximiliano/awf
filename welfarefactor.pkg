@@ -1,6 +1,6 @@
 v 0.0.3
 d The World Bank
-p newindex
-f /src/newindex.ado
-f /help/newindex.sthlp
+p welfarefactor
+f /src/welfarefactor.ado
+f /help/welfarefactor.sthlp
 e
