@@ -6,10 +6,10 @@ global data = "${path}/data"
 global src  = "${path}/src"
 
 * run ado file
-run "${src}/welfarefactor.ado"
+// run "${src}/welfarefactor.ado"
 
 * From github using net install as well
-// net install welfarefactor, from("https://raw.githubusercontent.com/rrmaximiliano/welfarefactor/main") replace force 
+net install welfarefactor, from("https://raw.githubusercontent.com/rrmaximiliano/welfarefactor/disc_01") replace force 
 
 * ------------------------------------------------------------------------------
 * Test example
