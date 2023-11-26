@@ -15,6 +15,16 @@ run "${src}/welfarefactor.ado"
 * Test example
 * ------------------------------------------------------------------------------
 
+/*
+ Options
+ - z: reference income value 
+ - bc: bottom coded value
+ - winsor: percentile inrange(1,99)
+ - notes: display notes
+ - keep: keep generated variables
+ - dotplot: dot plot (VAR vs W index)
+*/
+
 * Example 1
 * ------------------------------------------------------------------------------
 * load data
@@ -24,7 +34,7 @@ use "${data}/NLSS2011_cons.dta", clear
 svyset xhpsu [pweight=wt_ind], strata(xstra)
 
 * First with no missings and no zeroes
-welfarefactor totcons_pc_7, z(45000)
+welfarefactor totcons_pc_7, z(45000) 
 
 * Make some missings
 replace totcons_pc_7 = . in 36/80     // 45 to missing
@@ -58,32 +68,12 @@ welfarefactor totcons_pc_7, z(45000) bc(100) winsor(0.5)
 * Those 10 will be BC to 6000
 welfarefactor totcons_pc_7, z(45000) bc(6000) 
 
-* Using BCP
-welfarefactor totcons_pc_7, z(45000) winsor(50) 
+* Using BCP (from 1 to 100)
+welfarefactor totcons_pc_7, z(45000) winsor(5) 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        
-welfarefactor totcons_pc_7, z(45000)             // Total HH consumption
-welfarefactor food_pc_7,    z(20000)             // Food consumption which contains two obs with 0s.
-welfarefactor food_pc_7,    z(20000) bc(100)     // Bottom coded those two obs.
- 
-* Example 2
+* ------------------------------------------------------------------------------ 
+* Example 3
 * ------------------------------------------------------------------------------
 * load data
 use "${data}/SEPOV.dta", clear
@@ -95,8 +85,9 @@ welfarefactor pcexp_r, z(129.19) keep notes
 
 * replace obs to 0
 replace pcexp_r = 0 in 1/20
-welfarefactor pcexp_r, z(129.19) keep
+welfarefactor pcexp_r, z(129.19)
 welfarefactor pcexp_r, z(129.19) bc(100) keep 
+welfarefactor pcexp_r, z(129.19) winsor(10) keep 
 
 * Using an example dataset to generate diff SEs example (with jacknife)
 * ------------------------------------------------------------------------------
@@ -109,9 +100,10 @@ svyset [pweight=pw], jkrweight(jkw_*) vce(jackknife)
 gen income = runiformint(1,10000)
 
 * index
-welfarefactor income, z(2000) keep notes
+welfarefactor income, z(2000) keep 
 
 * replace obs to 0
 replace income = 0 in 1/20
 welfarefactor income, z(2000) keep 
-welfarefactor income, z(2000) keep bottom 
+welfarefactor income, z(2000) bc(100) 
+welfarefactor income, z(2000) winsor(1) 

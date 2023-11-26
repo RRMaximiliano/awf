@@ -141,34 +141,26 @@
         display as result "I Index is defined as: the inequality index which is the average factor by which `varlist' must be multiplied to get to the mean `varlist'."         
       }     
       
-      
-      * Message: Count 0 and not bottomcoded
-      if (`NN' != 0) & (`BC_USED' == 0 & `W_USED' == 0) {
-        display as error "Warning: There are a total of `NN' observations with 0s or negatives in your dataset and they have been removed from the estimations. Please check the distribution of `varlist'."
+      * If obs with 0s
+      if (`NN' != 0) {
+        display as error "Warning: There are a total of `NN' observations with 0s or negatives in your dataset and they have been removed from the estimations. Please check the distribution of `varlist'."        
       }
       
-      * Message: Count 0 and not bottom coded and observations with 0s
-      else if (`ZZ' != 0) & (`BC_USED' == 0 & `W_USED' == 0) {
-        display as error "Warning: There are a total of `NN' observations with 0s or negatives in your dataset and they have been removed from the estimations. Please check the distribution of `varlist'."
+      * If missing values
+      if (`MM' != 0) {
+        display as error "Warning: There are a total of `MM' observations with missing values in your dataset and they have been removed from the estimations. Please check the distribution of `varlist'."    
       }
       
-      * Message: Count 0 and bottom coded
-      else if (`NN' != 0) & (`BC_USED' == 1) {
+      * If BC used
+      if (`BC_USED' == 1) {
         display as error "Warning: There are a total of `NBC' observations with values less than `bc' in your dataset. `NBC' were bottom coded and have been set to `bc'."
-        display as error "There are also `NN' with 0s or negatives in your dataset and they have been removed from the estimations. Please check the distribution of `varlist'."
       }
       
-      * Message: Count 0 and bottom coded
-      else if (`NN' != 0) & (`BC_USED' == 1) {
-        display as error "Warning: There are a total of `NBC' observations with values less than `bc' in your dataset. `NBC' were bottom coded and have been set to `bc'."
-        display as error "There are also `NN' with 0s or negatives in your dataset and they have been removed from the estimations. Please check the distribution of `varlist'."
-      }
-      
-      * Message: Count 0 and winsorized variables
-      else if (`NN' != 0) & (`W_USED' == 1) {
+      * If winsorized
+      if (`W_USED' == 1) {
         display as error "Warning: A total of `WW' observations were left-winsorized at the `winsor' percentile in your dataset."
-        display as error "There are also `NN' with 0s or negatives in your dataset and they have been removed from the estimations. Please check the distribution of `varlist'."
       }
+
       
       * Message: Paper notes
       display as result "Note: These indices correspond to the four welfare, poverty, and inequality indices discussed in Section 2 of Kraay (r) al. (2023)." 
