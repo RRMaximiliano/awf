@@ -66,8 +66,9 @@ help for {hi:welfarefactor}
     . welfarefactor income, z(2000) keep nonotes
 
 {title:Author}
+
 {phang} Berk Ozler, Development Research Group, The World Bank
+
 {phang} Dean Mitchell Jolliffe, Development Data Group, The World Bank
+
 {phang} Rony Rodriguez Ramirez, Development Research Group, The World Bank
-
-
