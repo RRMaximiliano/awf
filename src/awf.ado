@@ -101,16 +101,15 @@ program define awf, rclass
         *generate variable and get the percentile
         gen `win_var' = `varlist'
         _pctile `win_var' `weight_option', p(`bcp') // For the whole distribution not only for positives
-        
         local percentile = r(r1)
         replace `win_var' = `percentile' if  `win_var' <= `percentile'
         
         * Local count of the weighted percentile observations
-        tab `varlist' `weight_option' if `varlist' < `percentile' 
-        local WW = r(N)
+        sum `varlist' `weight_option' if `varlist' < `percentile' 
+        local WW = r(sum_w)
         
-        tab `varlist' `weight_option' if `varlist' <= 0
-        local WWNeg = r(N)
+        sum `varlist' `weight_option' if `varlist' <= 0
+        local WWNeg = r(sum_w)
         
         *create new var with the same values as _win
         drop `var'
@@ -165,14 +164,14 @@ program define awf, rclass
     if missing("`nonotes'") {
       display as result `"W: welfare index (please see Equation (1) {browse "https://documents.worldbank.org/en/publication/documents-reports/documentdetail/099934305302318791/idu0325015fc0a4d6046420afe405cb6b6a87b0b":in Kraay et al. 2023})"'   
       display as result `"C: censored welfare index (please see Equation (2) {browse "https://documents.worldbank.org/en/publication/documents-reports/documentdetail/099934305302318791/idu0325015fc0a4d6046420afe405cb6b6a87b0b":in Kraay et al. 2023})"'  
-      display as result `"P: use the second part of Equation (3) in {browse "https://documents.worldbank.org/en/publication/documents-reports/documentdetail/099934305302318791/idu0325015fc0a4d6046420afe405cb6b6a87b0b":in Kraay et al. 2023}"'     
+      display as result `"P = C - 1 (please see Equation (3) in {browse "https://documents.worldbank.org/en/publication/documents-reports/documentdetail/099934305302318791/idu0325015fc0a4d6046420afe405cb6b6a87b0b":in Kraay et al. 2023})"'     
       display as result `"I: inequality index (please see Equation (6) {browse "https://documents.worldbank.org/en/publication/documents-reports/documentdetail/099934305302318791/idu0325015fc0a4d6046420afe405cb6b6a87b0b":in Kraay et al. 2023})"'   
       display as result _newline `"Please refer to Section 2 in {browse "https://documents.worldbank.org/en/publication/documents-reports/documentdetail/099934305302318791/idu0325015fc0a4d6046420afe405cb6b6a87b0b":Kraay et al. (2023)} for the properties and interpretation of each of these indices."'
     }     
     
     * If obs with 0s or negatives
     if (`NN' != 0 & `BC_USED' == 0 & `W_USED' == 0) {
-        display as error _newline "Warning: There are `NN' observations in your dataset, where {it:`varlist'} <= 0." _newline "These observations have been excluded from the analysis. If you want these observations to be included in the analysis," _newline "you can bottom-code varlist using the bcn (number) or the bcp (percentile) options."    
+        display as error _newline "Warning: There are `NN' observations in your dataset, where {it:`varlist'} <= 0." _newline "These observations have been excluded from the analysis. If you want these observations to be included in the analysis," _newline "you can bottom-code {it:`varlist'} using the bcn (number) or the bcp (percentile) options."    
     }
         
     * If BC used
