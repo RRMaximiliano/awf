@@ -1,6 +1,0 @@
-v 0.0.5
-d The World Bank
-p welfarefactor
-f /src/welfarefactor.ado
-f /help/welfarefactor.sthlp
-e
