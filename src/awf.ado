@@ -1,9 +1,9 @@
-*! version 0.0.7 04DIC2023 Average Welfare Factor
+*! version 0.0.8 06DIC2023 Average Welfare Factor
 
 capture program drop awf
 program define awf, rclass
   version 12
-  syntax varlist(min=1 max=1) [if] [in] [aw fw pw iw/],  ///
+  syntax varlist(min=1 max=1) [if] [in],  ///
     z(real)                               ///
     [                                     ///
     NONOTES                               ///
@@ -31,16 +31,6 @@ program define awf, rclass
   else if !missing("`bcn'")   local BC_USED = 1
   if missing("`bcp'")         local W_USED  = 0
   else if !missing("`bcp'")   local W_USED  = 1
-  
-  *Weights inputs
-  if !missing("`weight'") {
-    * Parsing weight options
-    local weight_type = "`weight'"
-    * Parsing keeps the separating character
-    local weight_var = subinstr("`exp'","=","",.)
-    * Parsing full information
-    local weight_option "[`weight_type' = `weight_var']"
-  }
   
   * Warning    
   if `BC_USED' == 1 & `W_USED' == 1 {
@@ -98,7 +88,16 @@ program define awf, rclass
       if (`W_USED' == 1 & inrange(`bcp',0,100)) {
         tempvar win_var
         
-        *generate variable and get the percentile
+        * Get back the weight information if any
+        svyset
+        if !missing("`r(wvar)'") {
+          local weight_type   = "`r(wvar)'"
+          local weight_option = "[w = `weight_type']"
+        }
+        else {
+          local weight_option = ""
+        }
+        * Gen variables for percentile
         gen `win_var' = `varlist'
         _pctile `win_var' `weight_option', p(`bcp') // For the whole distribution not only for positives
         local percentile = r(r1)
