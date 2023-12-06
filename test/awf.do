@@ -37,11 +37,9 @@ awf w3, z(300)                  // 15 <= 0 //  985
 awf w3, z(300) bcn(3)           // BC 17: 15 <= 0, total = 1000
 
 * Testing with BCP option
-// Differences between passing and not passing the weight option.
-// Main Issue here: svydescribe does not save the weights.
-// What we saw during our meeting was a residual eret from svy mean which was using the weights.
-// So, if the user starts coding without running any mean or regression, there is no way I can get the proper weights that were set in svyset
-awf w3, z(300) bcp(3)           // This will give us the non weighted percentile
-awf w3 [w=wt1], z(300) bcp(3)   // BCP Without weights (This will give us the weighted percentile for all positives)
+svyset,srs 
+awf w3, z(300) bcp(3)
+svyset [w=wt1]     
+awf w3, z(300) bcp(3)           
 
 

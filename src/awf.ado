@@ -93,9 +93,11 @@ program define awf, rclass
         if !missing("`r(wvar)'") {
           local weight_type   = "`r(wvar)'"
           local weight_option = "[w = `weight_type']"
+          local weight_label  = "weighted" 
         }
         else {
           local weight_option = ""
+          local weight_label  = "unweighted"
         }
         * Gen variables for percentile
         gen `win_var' = `varlist'
@@ -180,7 +182,7 @@ program define awf, rclass
     
     * If winsorized
     if (`W_USED' == 1) {
-      display as error _newline "Warning: There are a total of `WW' observations with {it:`varlist'} < `percentile' in your dataset," _newline "including `WWNeg' where {it:`varlist'} <= 0, all of which have been bottom coded to set {it:`varlist'} = `percentile'." _newline "`percentile' is the (weighted) value of the `bcp'th percentile of the distribution of {it:`varlist'}." _newline "Please make sure you are using the weight option when using BCP to estimate the proper percentile."
+      display as error _newline "Warning: There are a total of `WW' observations with {it:`varlist'} < `percentile' in your dataset," _newline "including `WWNeg' where {it:`varlist'} <= 0, all of which have been bottom coded to set {it:`varlist'} = `percentile'." _newline "`percentile' is the (`weight_label') value of the `bcp'th percentile of the distribution of {it:`varlist'}."
     }
   } 
   
