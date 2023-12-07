@@ -1,4 +1,4 @@
-*! version 0.0.8 06DIC2023 Average Welfare Factor
+*! version 0.0.9 06DIC2023 Average Welfare Factor
 
 capture program drop awf
 program define awf, rclass
@@ -144,9 +144,7 @@ program define awf, rclass
   
   * Check if z is positive
   if `z' > 0 {
-    * Mean estimates
-    display as text "Distribution-Sensitive Index for var: `varlist'"
-    
+    * Mean estimates    
     capture drop W C P I
     quietly {
       gen W = `W'
@@ -177,7 +175,7 @@ program define awf, rclass
         
     * If BC used
     if (`BC_USED' == 1) {
-      display as error _newline "Warning: There are a total of `TNBC' observations with {it:`varlist'} < 3 in your dataset, including `NN' where `varlist' <= 0, all of which have been bottom coded to set `varlist' = `bcn'"
+      display as error _newline "Warning: There are a total of `TNBC' observations with {it:`varlist'} < 3 in your dataset," _newline "including `NN' where `varlist' <= 0, all of which have been bottom coded to set `varlist' = `bcn'"
     }
     
     * If winsorized
