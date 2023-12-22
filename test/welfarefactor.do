@@ -9,7 +9,7 @@ global src  = "${path}/src"
 // run "${src}/awf.ado"
 
 * From github using net install as well
-net install awf, from("https://raw.githubusercontent.com/rrmaximiliano/awf/disc_01") replace force 
+net install awf, from("https://raw.githubusercontent.com/rrmaximiliano/awf/main") replace force 
 
 * ------------------------------------------------------------------------------
 * Test example
